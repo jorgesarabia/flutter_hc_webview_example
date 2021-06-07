@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,6 +29,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const _channel = 'ejemplo.hybrid.composition.webview';
+  static const _method = 'nativeWebView';
+  static const _methodChannel = const MethodChannel(_channel);
+
+  String finalUrl = 'Hello!';
+
+  Future<void> _launchPlatformWebView() async {
+    final String? platformFinalUrl = await _methodChannel.invokeMethod(
+      _method,
+      'https://www.google.com',
+    );
+    setState(() {
+      finalUrl = platformFinalUrl ?? 'No URL';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,9 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            ElevatedButton(
+              onPressed: _launchPlatformWebView,
+              child: Text('Abrir el WebView'),
             ),
+            Text(finalUrl),
           ],
         ),
       ),
