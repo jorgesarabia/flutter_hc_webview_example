@@ -76,9 +76,9 @@ class WebViewActivity: AppCompatActivity(){
         val settings:WebSettings = webView.settings
         settings.javaScriptEnabled = true
 
-        if(receivedUrl.isNullOrBlank() || receivedUrl.isNullOrEmpty() || 
-                    !URLUtil.isValidUrl(receivedUrl)
-        ){
+        val urlIsNotValid= receivedUrl.isNullOrBlank() || receivedUrl.isNullOrEmpty()
+
+        if(urlIsNotValid || !URLUtil.isValidUrl(receivedUrl)){
             webView.loadUrl(baseUrl)
         }else{
             webView.loadUrl(receivedUrl)
