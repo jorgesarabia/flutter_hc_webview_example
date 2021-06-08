@@ -35,14 +35,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".WebViewActivity"
-          android:parentActivityName=".MainActivity">
-          <!-- The meta-data tag is required if you support API level 15 and lower -->
-          <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:resource="@style/WebViewTheme"
-              android:value=".MainActivity" />
-        </activity>
+        <activity
+            android:name=".WebViewActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale"></activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

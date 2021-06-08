@@ -37,7 +37,7 @@ class MainActivity: FlutterActivity() {
     // fullScreenIntent.putExtra(WebViewActivity.extraWebView, url);
     // startActivityForResult(fullScreenIntent, REQUEST);
     val intent = Intent(this, WebViewActivity::class.java).apply {
-      putExtra("webviewExtra", url)
+      putExtra(WebViewActivity().EXTRA_WEBVIEW, url)
     }
 
     startActivity(intent)

@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.webkit.*
 import android.widget.SearchView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.appcompat.app.AppCompatActivity
 
-
-class WebViewActivity: FlutterActivity() {
-    public val extraWebView = "webviewExtra";
+class WebViewActivity: AppCompatActivity(){
+    public val EXTRA_WEBVIEW = "webviewExtra";
     private var lastUrl = "";
     private val baseUrl = "https://www.google.com"
     private val searchPath = "/search?q="
@@ -21,6 +21,9 @@ class WebViewActivity: FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Get the Intent that started this activity and extract the string
+        val receivedUrl = intent.getStringExtra(EXTRA_WEBVIEW)
 
         webView = findViewById<WebView>(R.id.webView)
         swipeRefresh = findViewById(R.id.swipeRefresh)
@@ -73,7 +76,13 @@ class WebViewActivity: FlutterActivity() {
         val settings:WebSettings = webView.settings
         settings.javaScriptEnabled = true
 
-        webView.loadUrl(baseUrl)
+        if(receivedUrl.isNullOrBlank() || receivedUrl.isNullOrEmpty() || 
+                    !URLUtil.isValidUrl(receivedUrl)
+        ){
+            webView.loadUrl(baseUrl)
+        }else{
+            webView.loadUrl(receivedUrl)
+        }
 
     }
 
