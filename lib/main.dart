@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _launchPlatformWebView() async {
     final String? platformFinalUrl = await _methodChannel.invokeMethod(
       _method,
-      'https://www.google.com',
+      'https://www.amazon.com',
     );
     setState(() {
       finalUrl = platformFinalUrl ?? 'No URL';

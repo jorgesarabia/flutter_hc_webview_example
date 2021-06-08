@@ -16,7 +16,8 @@ class MainActivity: FlutterActivity() {
     MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
       call, result ->
       if (call.method == METHOD) {
-        onLaunchWebView("https://www.apple.com/")
+        val url:String = call.arguments()
+        onLaunchWebView(url)
       } else {
         result.notImplemented()
       }
