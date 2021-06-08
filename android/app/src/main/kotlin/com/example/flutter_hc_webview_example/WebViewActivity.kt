@@ -51,8 +51,7 @@ class WebViewActivity: AppCompatActivity(){
             webView.reload()
         }
 
-        webView.webChromeClient = object: WebChromeClient() {
-        }
+        webView.webChromeClient = object: WebChromeClient() {}
 
         webView.webViewClient = object :WebViewClient(){
             override fun shouldOverrideUrlLoading(
@@ -97,7 +96,6 @@ class WebViewActivity: AppCompatActivity(){
             }
             setResult(RESULT_OK, intent);
             finish();
-            // super.onBackPressed()
         }
     }
 }
