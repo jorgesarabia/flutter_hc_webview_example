@@ -1,5 +1,6 @@
 package com.example.flutter_hc_webview_example
 
+import android.content.Intent;
 import android.graphics.Bitmap
 import io.flutter.embedding.android.FlutterActivity
 import android.os.Bundle
@@ -10,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class WebViewActivity: AppCompatActivity(){
     public val EXTRA_WEBVIEW = "webviewExtra";
-    private var lastUrl = "";
+    private var lastUrl:String = "";
     private val baseUrl = "https://www.google.com"
     private val searchPath = "/search?q="
 
@@ -51,8 +52,8 @@ class WebViewActivity: AppCompatActivity(){
         }
 
         webView.webChromeClient = object: WebChromeClient() {
-
         }
+
         webView.webViewClient = object :WebViewClient(){
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
@@ -69,6 +70,7 @@ class WebViewActivity: AppCompatActivity(){
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+                lastUrl = url!!
                 swipeRefresh.isRefreshing = false
             }
         }
@@ -81,7 +83,7 @@ class WebViewActivity: AppCompatActivity(){
         if(urlIsNotValid || !URLUtil.isValidUrl(receivedUrl)){
             webView.loadUrl(baseUrl)
         }else{
-            webView.loadUrl(receivedUrl)
+            webView.loadUrl(receivedUrl!!)
         }
 
     }
@@ -90,7 +92,12 @@ class WebViewActivity: AppCompatActivity(){
         if(webView.canGoBack()){
             webView.goBack()
         }else{
-            super.onBackPressed()
+            val intent = Intent().apply {
+                putExtra(EXTRA_WEBVIEW, lastUrl)
+            }
+            setResult(RESULT_OK, intent);
+            finish();
+            // super.onBackPressed()
         }
     }
 }

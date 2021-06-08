@@ -11,10 +11,13 @@ class MainActivity: FlutterActivity() {
   private val METHOD = "nativeWebView"
   private val REQUEST = 1
 
+  lateinit var methodResult:MethodChannel.Result
+
   override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
     MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
       call, result ->
+      methodResult = result
       if (call.method == METHOD) {
         val url:String = call.arguments()
         onLaunchWebView(url)
@@ -41,9 +44,20 @@ class MainActivity: FlutterActivity() {
       putExtra(WebViewActivity().EXTRA_WEBVIEW, url)
     }
 
-    startActivity(intent)
+    startActivityForResult(intent, REQUEST);
 
     // startForResult.launch(Intent(activity, CameraCaptureActivity::class.java))
+  }
+
+  override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent){
+    if (requestCode == REQUEST) {
+      if (resultCode == RESULT_OK) {
+        var recibido = data.getStringExtra(WebViewActivity().EXTRA_WEBVIEW)
+        methodResult.success(recibido);
+      } else {
+        methodResult.error("ACTIVITY_FAILURE", "Failed while launching activity", null);
+      }
+    }
   }
 
   // @Override
