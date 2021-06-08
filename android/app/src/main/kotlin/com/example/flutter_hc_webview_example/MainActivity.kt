@@ -28,25 +28,11 @@ class MainActivity: FlutterActivity() {
   }
 
   private fun onLaunchWebView(url:String){
-    // val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-    // { result: ActivityResult ->
-    //     if (result.resultCode == Activity.RESULT_OK) {
-    //         //  you will get result here in result.data
-    //         }
-
-    //     }
-    // }
-
-    // Intent fullScreenIntent = Intent(this, MainActivity.class);
-    // fullScreenIntent.putExtra(WebViewActivity.extraWebView, url);
-    // startActivityForResult(fullScreenIntent, REQUEST);
     val intent = Intent(this, WebViewActivity::class.java).apply {
       putExtra(WebViewActivity().EXTRA_WEBVIEW, url)
     }
 
     startActivityForResult(intent, REQUEST);
-
-    // startForResult.launch(Intent(activity, CameraCaptureActivity::class.java))
   }
 
   override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent){
@@ -59,15 +45,4 @@ class MainActivity: FlutterActivity() {
       }
     }
   }
-
-  // @Override
-  // protected fun onActivityResult(int requestCode, int resultCode, Intent data) {
-  //   if (requestCode == REQUEST) {
-  //     if (resultCode == RESULT_OK) {
-  //       result.success(data.getIntExtra(CountActivity.extraWebView, 0));
-  //     } else {
-  //       result.error("ACTIVITY_FAILURE", "Failed while launching activity", null);
-  //     }
-  //   }
-  // }
 }
