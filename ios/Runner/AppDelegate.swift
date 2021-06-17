@@ -19,13 +19,19 @@ import Flutter
         result(FlutterMethodNotImplemented)
         return
       }
-      self.openWebView(result: result)
+        let viewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"MyViewController") as UIViewController
+        viewController.modalPresentationStyle = .fullScreen
+
+        controller.present(viewController, animated: false, completion: nil)
+        
+    
+      //self.openWebView(result: result)
     })
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  private func openWebView(result: FlutterResult){
-    result("No URL")
-  }
+//  private func openWebView(result: FlutterResult){
+//    result("No URL")
+//  }
 }
