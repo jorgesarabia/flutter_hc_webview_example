@@ -1,8 +1,15 @@
 import UIKit
 import Flutter
 
+protocol MyProtocol {
+    func onInteractionFinish(type: String)
+}
+
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, MyProtocol {
+    
+    var flutterResult:FlutterResult? = nil
+    
 
   override func application(
     _ application: UIApplication,
@@ -15,23 +22,24 @@ import Flutter
                                               binaryMessenger: controller.binaryMessenger)
     batteryChannel.setMethodCallHandler({
       (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+        self.flutterResult = result
       guard call.method == "nativeWebView" else {
         result(FlutterMethodNotImplemented)
         return
       }
-        let viewController:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"MyViewController") as UIViewController
+        let viewController:ViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"MyViewController") as! ViewController
         viewController.modalPresentationStyle = .fullScreen
+        viewController.delegate = self
 
         controller.present(viewController, animated: false, completion: nil)
-        
-    
-      //self.openWebView(result: result)
     })
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-
-//  private func openWebView(result: FlutterResult){
-//    result("No URL")
-//  }
+    
+    func onInteractionFinish(type: String){
+        if let unwrapped = flutterResult {
+            unwrapped(type)
+        }
+    }
 }
