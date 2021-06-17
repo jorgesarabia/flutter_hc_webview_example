@@ -31,7 +31,7 @@ protocol MyProtocol {
         viewController.modalPresentationStyle = .fullScreen
         viewController.delegate = self
 
-        controller.present(viewController, animated: false, completion: nil)
+        controller.present(viewController, animated: true, completion: nil)
     })
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
