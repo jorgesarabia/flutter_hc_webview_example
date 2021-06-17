@@ -29,6 +29,9 @@ protocol MyProtocol {
       }
         let viewController:ViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"MyViewController") as! ViewController
         viewController.modalPresentationStyle = .fullScreen
+        if let urlArg = call.arguments{
+            viewController.initialUrl = urlArg as! String
+        }
         viewController.delegate = self
 
         controller.present(viewController, animated: true, completion: nil)
