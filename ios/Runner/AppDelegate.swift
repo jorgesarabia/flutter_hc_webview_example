@@ -8,7 +8,7 @@ protocol MyProtocol {
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate, MyProtocol {
     
-    var flutterResult:FlutterResult? = nil
+    var flutterResult:FlutterResult?
     
 
   override func application(
@@ -22,19 +22,26 @@ protocol MyProtocol {
                                               binaryMessenger: controller.binaryMessenger)
     batteryChannel.setMethodCallHandler({
       (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
-        self.flutterResult = result
-      guard call.method == "nativeWebView" else {
-        result(FlutterMethodNotImplemented)
-        return
-      }
-        let viewController:ViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"MyViewController") as! ViewController
-        viewController.modalPresentationStyle = .fullScreen
-        if let urlArg = call.arguments{
-            viewController.initialUrl = urlArg as! String
+        if ("nativeWebView" == call.method) {
+            self.flutterResult = result
+            
+            let viewController:ViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"MyViewController") as! ViewController
+            viewController.delegate = self
+            viewController.initialUrl = call.arguments as! String
+            
+            
+            
+            // Open with navigator
+//            let navigationController = UINavigationController(rootViewController: viewController)
+//            navigationController.navigationBar.topItem?.title = "Platform View"
+//            controller.present(navigationController, animated: true, completion: nil)
+            
+            // Open as a modal
+             viewController.modalPresentationStyle = .fullScreen
+             controller.present(viewController, animated: true, completion: nil)
+        } else {
+            result(FlutterMethodNotImplemented)
         }
-        viewController.delegate = self
-
-        controller.present(viewController, animated: true, completion: nil)
     })
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
