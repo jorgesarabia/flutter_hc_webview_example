@@ -15,17 +15,24 @@ class ViewController: UIViewController {
     var lastUrl:String = ""
     
     private var webView:WKWebView!
-    @IBOutlet weak var navBAr: UINavigationItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let webViewPrefs = WKPreferences()
-        webViewPrefs.javaScriptEnabled = true
-        webViewPrefs.javaScriptCanOpenWindowsAutomatically = true
-
         let config = WKWebViewConfiguration()
-        config.preferences = webViewPrefs
+        
+        if #available(iOS 14, *) {
+            let webViewPrefs = WKWebpagePreferences()
+            webViewPrefs.allowsContentJavaScript = true
+
+            config.defaultWebpagePreferences = webViewPrefs
+        } else {
+            let webViewPrefs = WKPreferences()
+            webViewPrefs.javaScriptEnabled = true
+            webViewPrefs.javaScriptCanOpenWindowsAutomatically = true
+            
+            config.preferences = webViewPrefs
+        }
 
         webView = WKWebView(frame: view.frame, configuration: config)
         webView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
@@ -39,18 +46,10 @@ class ViewController: UIViewController {
     private func load(url:URL){
         webView.load(URLRequest(url: url))
     }
-
-    @IBAction func backButton(_ sender: Any) {
-        delegate?.onInteractionFinish(type: "Volvi desde el bar")
-        self.dismiss(animated: true, completion: nil)
-    }
 }
 
 extension ViewController:WKNavigationDelegate{
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        //refreshControl.endRefreshing()
-        //backButton.isEnabled = webView.canGoBack
-        //forwardButton.isEnabled = webView.canGoForward
         if let thisUrl = webView.url?.absoluteString{
             lastUrl = thisUrl
         }
@@ -61,6 +60,5 @@ extension ViewController:WKNavigationDelegate{
         }
     }
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        //refreshControl.beginRefreshing()
     }
 }
